@@ -1,7 +1,8 @@
 package com.example.covid.controller.api;
 
+import com.example.covid.exception.GeneralException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequestMapping("/api")
@@ -9,12 +10,14 @@ import java.util.List;
 public class APIEventController {
 
     @GetMapping("/events")
-    public List<String> getEvents(){
+    public List<String> getEvents() {
+        // throw new HttpRequestMethodNotSupportedException("스프링 에러 테스트");
         return List.of("event1", "event2");
     }
 
     @PostMapping("/events")
-    public Boolean createEvent(){
+    public Boolean createEvent() {
+        // throw new GeneralException("GeneralException 테스트 메시지");
         return true;
     }
 
