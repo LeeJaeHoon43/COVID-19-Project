@@ -1,5 +1,6 @@
 package com.example.covid.dto;
 
+import com.example.covid.constant.ErrorCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -7,16 +8,16 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class ApiDataResponse extends com.example.covid.dto.ApiErrorResponse{
+public class ApiDataResponse<T> extends com.example.covid.dto.ApiErrorResponse{
 
-    private final Object data;
+    private final T data;
 
-    protected ApiDataResponse(Boolean success, Integer errorCode, String message, Object data) {
-        super(success, errorCode, message);
+    protected ApiDataResponse(T data) {
+        super(true, ErrorCode.OK.getCode(), ErrorCode.OK.getMessage());
         this.data = data;
     }
 
-    public static ApiDataResponse of(boolean success, Integer errorCode, String message, Object data){
-        return new ApiDataResponse(success, errorCode, message, data);
+    public static <T> ApiDataResponse<T> of(T data){
+        return new ApiDataResponse(data);
     }
 }
