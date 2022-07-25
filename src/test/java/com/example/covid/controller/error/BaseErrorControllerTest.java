@@ -1,5 +1,6 @@
-package com.example.covid.error;
+package com.example.covid.controller.error;
 
+import com.example.covid.controller.error.BaseErrorController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

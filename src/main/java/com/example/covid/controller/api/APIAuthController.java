@@ -1,20 +1,20 @@
 package com.example.covid.controller.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.covid.dto.AdminRequest;
+import com.example.covid.dto.ApiDataResponse;
+import com.example.covid.dto.LoginRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api")
 @RestController
 public class APIAuthController {
 
-    @GetMapping("/sign-up")
-    public String signUp(){
-        return "done.";
+    public ApiDataResponse<String> signUp(@RequestBody AdminRequest adminRequest) {
+        return ApiDataResponse.empty();
     }
 
-    @GetMapping("/login")
-    public String login(){
-        return "done.";
+    @PostMapping("/login")
+    public ApiDataResponse<String> login(@RequestBody LoginRequest loginRequest) {
+        return ApiDataResponse.empty();
     }
 }

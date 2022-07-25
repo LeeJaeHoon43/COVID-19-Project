@@ -10,7 +10,7 @@ public class Event {
 
     private Long id;
 
-    private Long placeId;
+    private Place placeId;
     private String eventName;
     private EventStatus eventStatus;
     private LocalDateTime eventStartDatetime;

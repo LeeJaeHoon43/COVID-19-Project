@@ -1,4 +1,4 @@
-package com.example.covid.error;
+package com.example.covid.controller.error;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.dto.ApiErrorResponse;
