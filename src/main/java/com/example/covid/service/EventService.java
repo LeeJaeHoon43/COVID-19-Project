@@ -6,11 +6,13 @@ import com.example.covid.dto.EventDto;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class EventService {
@@ -25,6 +27,7 @@ public class EventService {
             LocalDateTime eventEndDatetime
     ) {
         try {
+            log.debug("관찰 - placeId : {}", placeId);
             return eventRepository.findEvents(
                     placeId,
                     eventName,
