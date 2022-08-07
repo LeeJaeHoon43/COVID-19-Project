@@ -4,16 +4,19 @@ import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.PlaceType;
 import com.example.covid.dto.PlaceRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.junit.jupiter.api.Assertions.*;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
+@DisplayName("API 컨트롤러 - 장소")
 @WebMvcTest(APIPlaceController.class)
 class APIPlaceControllerTest {
 
@@ -23,7 +26,7 @@ class APIPlaceControllerTest {
     public APIPlaceControllerTest(
             @Autowired MockMvc mvc,
             @Autowired ObjectMapper mapper
-    ) {
+            ) {
         this.mvc = mvc;
         this.mapper = mapper;
     }
@@ -64,10 +67,10 @@ class APIPlaceControllerTest {
 
         // When & Then
         mvc.perform(
-                        post("/api/places")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(placeRequest))
-                )
+                post("/api/places")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(placeRequest))
+        )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
@@ -129,10 +132,10 @@ class APIPlaceControllerTest {
 
         // When & Then
         mvc.perform(
-                        put("/api/places/" + placeId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(placeRequest))
-                )
+                put("/api/places/" + placeId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(placeRequest))
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))

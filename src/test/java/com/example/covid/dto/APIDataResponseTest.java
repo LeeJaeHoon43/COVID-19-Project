@@ -3,21 +3,22 @@ package com.example.covid.dto;
 import com.example.covid.constant.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class ApiDataResponseTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DisplayName("데이터 - API 기본 응답")
+class APIDataResponseTest {
 
     @DisplayName("문자열 데이터가 주어지면, 표준 성공 응답을 생성한다.")
     @Test
-    void givenStringData_whenCreatingResponse_thenReturnsSuccessfulResponse(){
-        // given
+    void givenStringData_whenCreatingResponse_thenReturnsSuccessfulResponse() {
+        // Given
         String data = "test data";
 
-        // when
-        ApiDataResponse response = ApiDataResponse.of(data);
+        // When
+        ApiDataResponse<String> response = ApiDataResponse.of(data);
 
-        // then
+        // Then
         assertThat(response)
                 .hasFieldOrPropertyWithValue("success", true)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.OK.getCode())
@@ -27,13 +28,13 @@ class ApiDataResponseTest {
 
     @DisplayName("데이터가 없을 때, 비어있는 표준 성공 응답을 생성한다.")
     @Test
-    void givenNothing_whenCreatingResponse_thenReturnsEmptySuccessfulResponse(){
-        // given
+    void givenNothing_whenCreatingResponse_thenReturnsEmptySuccessfulResponse() {
+        // Given
 
-        // when
-        ApiDataResponse response = ApiDataResponse.empty();
+        // When
+        ApiDataResponse<String> response = ApiDataResponse.empty();
 
-        // then
+        // Then
         assertThat(response)
                 .hasFieldOrPropertyWithValue("success", true)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.OK.getCode())

@@ -1,30 +1,22 @@
 package com.example.covid.repository;
 
-import com.example.covid.constant.EventStatus;
-import com.example.covid.dto.EventDto;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.example.covid.domain.Event;
+import com.example.covid.domain.QEvent;
+import com.querydsl.core.types.dsl.ComparableExpression;
+import com.querydsl.core.types.dsl.StringExpression;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
 
-public interface EventRepository {
+public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event>, QuerydslBinderCustomizer<QEvent> {
 
-    default List<EventDto> findEvents(Long placeId, String eventName, EventStatus eventStatus, LocalDateTime eventStartDatetime, LocalDateTime eventEndDatetime) {
-        return List.of();
-
-    }
-    default Optional<EventDto> findEvent(Long eventId) {
-        return Optional.empty();
-    }
-
-    default boolean insertEvent(EventDto eventDTO) {
-        return false;
-    }
-
-    default boolean updateEvent(Long eventId, EventDto dto) {
-        return false;
-    }
-
-    default boolean deleteEvent(Long eventId) {
-        return false;
+    @Override
+    default void customize(QuerydslBindings bindings, QEvent root) {
+        bindings.excludeUnlistedProperties(true);
+        bindings.including(root.placeId, root.eventName, root.eventStatus, root.eventStartDatetime, root.eventEndDatetime);
+        bindings.bind(root.eventName).first(StringExpression::containsIgnoreCase);
+        bindings.bind(root.eventStartDatetime).first(ComparableExpression::goe);
+        bindings.bind(root.eventEndDatetime).first(ComparableExpression::loe);
     }
 }
