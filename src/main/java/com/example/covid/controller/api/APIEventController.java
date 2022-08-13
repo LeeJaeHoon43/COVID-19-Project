@@ -1,9 +1,11 @@
 package com.example.covid.controller.api;
 
 import com.example.covid.constant.EventStatus;
+import com.example.covid.constant.PlaceType;
 import com.example.covid.dto.ApiDataResponse;
 import com.example.covid.dto.EventRequest;
 import com.example.covid.dto.EventResponse;
+import com.example.covid.dto.PlaceDto;
 import com.example.covid.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,8 +18,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// @Validated
 @RequiredArgsConstructor
+// @Validated
 // @RequestMapping("/api")
 // @RestController
 public class APIEventController {
@@ -51,34 +53,23 @@ public class APIEventController {
     }
 
     @GetMapping("/events/{eventId}")
-    public ApiDataResponse<EventResponse> getEvent(@PathVariable Long eventId) {
-        if (eventId.equals(2L)) {
-            return ApiDataResponse.empty();
-        }
-
-        return ApiDataResponse.of(EventResponse.of(
-                1L,
-                1L,
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                0,
-                24,
-                "마스크 꼭 착용하세요"
-        ));
+    public ApiDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
+        EventResponse eventResponse = EventResponse.from(eventService.getEvent(eventId).orElse(null));
+        return ApiDataResponse.of(eventResponse);
     }
 
     @PutMapping("/events/{eventId}")
-    public ApiDataResponse<Void> modifyEvent(
-            @PathVariable Long eventId,
-            @RequestBody EventRequest eventRequest
+    public ApiDataResponse<String> modifyEvent(
+            @Positive @PathVariable Long eventId,
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        return ApiDataResponse.empty();
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
     @DeleteMapping("/events/{eventId}")
-    public ApiDataResponse<Void> removeEvent(@PathVariable Long eventId) {
-        return ApiDataResponse.empty();
+    public ApiDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
+        boolean result = eventService.removeEvent(eventId);
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 }

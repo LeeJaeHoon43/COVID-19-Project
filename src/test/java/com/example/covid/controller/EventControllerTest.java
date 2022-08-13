@@ -61,7 +61,6 @@ class EventControllerTest {
                 .andExpect(view().name("event/detail"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("event"));
-
         then(eventService).should().getEvent(eventId);
     }
 
@@ -74,10 +73,9 @@ class EventControllerTest {
 
         // When & Then
         mvc.perform(get("/events/" + eventId))
-                .andExpect(status().isBadRequest()) // TODO: 나중에 404로 바꿔보자
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("error"));
-
         then(eventService).should().getEvent(eventId);
     }
 }

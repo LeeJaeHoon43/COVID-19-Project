@@ -2,24 +2,25 @@ package com.example.covid.service;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
+import com.example.covid.domain.Place;
 import com.example.covid.dto.EventDto;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.EventRepository;
+import com.example.covid.repository.PlaceRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final PlaceRepository placeRepository;
 
     public List<EventDto> getEvents(Predicate predicate) {
         try {
@@ -30,7 +31,6 @@ public class EventService {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
-
     public List<EventDto> getEvents(
             Long placeId,
             String eventName,
@@ -44,7 +44,6 @@ public class EventService {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
-
     public Optional<EventDto> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDto::of);
@@ -52,14 +51,15 @@ public class EventService {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
-
     public boolean createEvent(EventDto eventDTO) {
         try {
             if (eventDTO == null) {
                 return false;
             }
 
-            eventRepository.save(eventDTO.toEntity());
+            Place place = placeRepository.findById(eventDTO.placeDto().id())
+                    .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+            eventRepository.save(eventDTO.toEntity(place));
             return true;
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -71,8 +71,8 @@ public class EventService {
             if (eventId == null || dto == null) {
                 return false;
             }
-
-            eventRepository.findById(eventId).ifPresent(event -> eventRepository.save(dto.updateEntity(event)));
+            eventRepository.findById(eventId)
+                    .ifPresent(event -> eventRepository.save(dto.updateEntity(event)));
             return true;
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -84,7 +84,6 @@ public class EventService {
             if (eventId == null) {
                 return false;
             }
-
             eventRepository.deleteById(eventId);
             return true;
         } catch (Exception e) {
