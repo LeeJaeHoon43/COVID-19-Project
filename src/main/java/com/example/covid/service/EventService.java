@@ -4,11 +4,14 @@ import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.domain.Place;
 import com.example.covid.dto.EventDto;
+import com.example.covid.dto.EventViewResponse;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.EventRepository;
 import com.example.covid.repository.PlaceRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,19 +34,29 @@ public class EventService {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
-    public List<EventDto> getEvents(
-            Long placeId,
+
+    public Page<EventViewResponse> getEventViewResponse(
+            String placeName,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
-            LocalDateTime eventEndDatetime
+            LocalDateTime eventEndDatetime,
+            Pageable pageable
     ) {
         try {
-            return null;
+            return eventRepository.findEventViewPageBySearchParams(
+                    placeName,
+                    eventName,
+                    eventStatus,
+                    eventStartDatetime,
+                    eventEndDatetime,
+                    pageable
+            );
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
+
     public Optional<EventDto> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDto::of);
@@ -51,6 +64,7 @@ public class EventService {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
     }
+
     public boolean createEvent(EventDto eventDTO) {
         try {
             if (eventDTO == null) {
