@@ -11,6 +11,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DB - 이벤트")
@@ -22,7 +23,6 @@ class EventRepositoryTest {
     EventRepositoryTest(@Autowired EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
-
 
     @DisplayName("이벤트 뷰 데이터를 검색 파라미터와 함께 조회하면, 조건에 맞는 데이터를 페이징 처리하여 리턴한다.")
     @Test
